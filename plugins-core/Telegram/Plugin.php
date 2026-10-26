@@ -52,11 +52,11 @@ class Plugin extends AbstractPlugin
     }
 
     $message = sprintf(
-      "💰成功收款%s元\n" .
+      "💰收到欢乐豆%s个\n" .
       "———————————————\n" .
-      "支付接口：%s\n" .
-      "支付渠道：%s\n" .
-      "本站订单：`%s`",
+      "游戏接口：%s\n" .
+      "游戏渠道：%s\n" .
+      "游戏订单：`%s`",
       $order->total_amount / 100,
       Helper::escapeMarkdown($payment->payment),
       Helper::escapeMarkdown($payment->name),
