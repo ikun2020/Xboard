@@ -286,11 +286,19 @@ class UserController extends Controller
             }
             $params['group_id'] = $plan->group_id;
         }
-        // 处理邀请用户
-        if ($request->input('invite_user_email') && $inviteUser = User::byEmail($request->input('invite_user_email'))->first()) {
-            $params['invite_user_id'] = $inviteUser->id;
-        } else {
-            $params['invite_user_id'] = null;
+        // 仅在表单提交邀请人邮箱时更新邀请关系。
+        if (array_key_exists('invite_user_email', $params)) {
+            $inviteUserEmail = $params['invite_user_email'];
+            unset($params['invite_user_email']);
+
+            $inviteUser = null;
+            if ($inviteUserEmail !== null && $inviteUserEmail !== '') {
+                $inviteUser = User::byEmail($inviteUserEmail)->first();
+                if (!$inviteUser) {
+                    return $this->fail([400202, '邀请人不存在']);
+                }
+            }
+            $params['invite_user_id'] = $inviteUser?->id;
         }
 
         if (isset($params['banned']) && (int) $params['banned'] === 1) {
